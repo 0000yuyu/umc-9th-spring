@@ -48,7 +48,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
-### // In MissionRepository.java
+### // In MissionRepository.java (미션 모아서 보는 쿼리)
 
 ```java
 import org.springframework.data.domain.Pageable; 
@@ -74,4 +74,30 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
         Pageable pageable
     );
 }
+```
+
+### // In MissionRepository.java (홈화면 쿼리)
+```java
+@Query(value = """
+            SELECT m
+            FROM Mission m
+            JOIN FETCH m.shop s
+            WHERE m.user.id = :userId
+            AND s.address LIKE CONCAT('%', :region, '%')
+            AND m.status = com.example.umc9th.domain.mission.enums.Status.IN_PROCESS
+            ORDER BY m.missionId DESC
+            """,
+           countQuery = """
+            SELECT COUNT(m)
+            FROM Mission m
+            JOIN m.shop s
+            WHERE m.user.id = :userId
+            AND s.address LIKE CONCAT('%', :region, '%')
+            AND m.status = com.example.umc9th.domain.mission.enums.Status.IN_PROCESS
+            """)
+    Page<Mission> findHomeMissionsInProcess(
+            @Param("userId") Long userId,
+            @Param("region") String region,
+            Pageable pageable
+    );
 ```
