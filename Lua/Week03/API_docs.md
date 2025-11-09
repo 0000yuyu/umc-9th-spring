@@ -50,7 +50,7 @@
 -------------------------
 
 ### 미션 목록 조회
-**API Endpoint** : GET /missions
+**API Endpoint** : GET /users/me/missions
     
 **Request Header** : Authorization : Bearer {accessToken}
     
