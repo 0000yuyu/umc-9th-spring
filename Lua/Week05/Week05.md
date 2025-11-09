@@ -82,8 +82,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             SELECT m
             FROM Mission m
             JOIN FETCH m.shop s
+            JOIN s.locals l 
             WHERE m.user.id = :userId
-            AND s.address LIKE CONCAT('%', :region, '%')
+            AND l.localKeyword = :region
             AND m.status = com.example.umc9th.domain.mission.enums.Status.IN_PROCESS
             ORDER BY m.missionId DESC
             """,
@@ -91,8 +92,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             SELECT COUNT(m)
             FROM Mission m
             JOIN m.shop s
+            JOIN s.locals l
             WHERE m.user.id = :userId
-            AND s.address LIKE CONCAT('%', :region, '%')
+            AND l.localKeyword = :region
             AND m.status = com.example.umc9th.domain.mission.enums.Status.IN_PROCESS
             """)
     Page<Mission> findHomeMissionsInProcess(
