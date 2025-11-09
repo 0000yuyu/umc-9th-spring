@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     List<Review> findAllWithUserOrderByCreatedAtDesc();
 }
 ```
-
+#### rating에서 null 값을 받기 위해서 Integer 사용.
 ### ReviewRepositoryCustom.java
 
 ```java
@@ -68,7 +68,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
     @Override
     public Page<Review> findMyReviewsByFilters(Long userId, String shopName, Integer rating, Pageable pageable) {
-
+        //리뷰 목록 조회 쿼리
         List<Review> content = queryFactory
                 .selectFrom(review)
                 .join(review.shop, shop).fetchJoin()
@@ -82,7 +82,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
+        //전체 리뷰 조회 쿼리
         Long totalCount = queryFactory
                 .select(review.count())
                 .from(review)
@@ -97,11 +97,11 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
         return new PageImpl<>(content, pageable, totalCount != null ? totalCount : 0L);
     }
-
+    //shopName 동적쿼리
     private BooleanExpression shopNameEq(String shopName) {
         return hasText(shopName) ? shop.name.eq(shopName) : null;
     }
-
+    //ratingEq 동적 쿼리
     private BooleanExpression ratingEq(Integer rating) {
         return (rating != null && rating > 0) ? review.rating.eq(rating) : null;
     }
