@@ -23,7 +23,7 @@ public class Review {
     private Long id;
 
     @Column(name = "rating", nullable = false)
-    private int rating;
+    private Integer rating;
 
     @Column(name = "review_text")
     private String reviewText;
@@ -41,3 +41,4 @@ public class Review {
     private Shop shop;
 
 }
+
