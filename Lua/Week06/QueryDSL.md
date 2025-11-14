@@ -87,9 +87,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .select(review.count())
                 .from(review)
                 .join(review.shop, shop)
-                .join(review.user, user)
                 .where(
-                        user.id.eq(userId),
+                        review.user.id.eq(userId),
                         shopNameEq(shopName),
                         ratingEq(rating)
                 )
