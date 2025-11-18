@@ -1,9 +1,9 @@
 package com.example.umc9th.domain.review.controller;
 
-import com.example.umc9th.domain.review.dto.ReviewDto;
-import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.dto.ReviewResDto;
 import com.example.umc9th.domain.review.service.ReviewQueryService;
-import org.springframework.stereotype.Controller;
+import com.example.umc9th.global.apiPayload.ApiResponse;
+import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +21,9 @@ public class ReviewController {
         this.reviewQueryService = reviewQueryService;
     }
     @GetMapping("reviews/search")
-    public List<ReviewDto> searchReview(@RequestParam String query, @RequestParam String type){
-        return reviewQueryService.searchReview(query,type);
+    public ApiResponse<List<ReviewResDto.ReviewItemDTO>> searchReview(@RequestParam String query, @RequestParam String type){
+        List<ReviewResDto.ReviewItemDTO> reviewList = reviewQueryService.searchReview(query,type);
+        GeneralSuccessCode code = GeneralSuccessCode.SUCCESS_CODE;
+        return ApiResponse.onSuccess(code,reviewList);
     }
 }

@@ -5,6 +5,7 @@ import com.example.umc9th.domain.store.entity.Store;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.List;
 public class Review extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter
   @Column(name = "review_id")
   private Long id;
 
@@ -29,7 +29,6 @@ public class Review extends BaseEntity {
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="store_id")
   private Store store;
 
   @ManyToOne(fetch = FetchType.LAZY)
