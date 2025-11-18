@@ -75,7 +75,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .join(review.user, user)
                 .where(
                         user.id.eq(userId),
-                        shopNameEq(shopName),
+                        shopNameContains(shopName),
                         ratingEq(rating)
                 )
                 .orderBy(review.createdAt.desc())
@@ -87,10 +87,9 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .select(review.count())
                 .from(review)
                 .join(review.shop, shop)
-                .join(review.user, user)
                 .where(
-                        user.id.eq(userId),
-                        shopNameEq(shopName),
+                        review.user.id.eq(userId),
+                        shopNameContains(shopName),
                         ratingEq(rating)
                 )
                 .fetchOne();
@@ -98,8 +97,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
         return new PageImpl<>(content, pageable, totalCount != null ? totalCount : 0L);
     }
     //shopName 동적쿼리
-    private BooleanExpression shopNameEq(String shopName) {
-        return hasText(shopName) ? shop.name.eq(shopName) : null;
+    private BooleanExpression shopNameContains(String shopName) {
+        return hasText(shopName) ? shop.name.contains(shopName) : null;
     }
     //ratingEq 동적 쿼리
     private BooleanExpression ratingEq(Integer rating) {
